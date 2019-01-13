@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingGraph", "TestingGraph\TestingGraph.csproj", "{A823AC28-91EF-403E-98FB-034C22B6CC97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingGraph.Tests", "TestingGraph.Tests\TestingGraph.Tests.csproj", "{A882DCAB-E555-47AA-B289-77A425CA3ABE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A823AC28-91EF-403E-98FB-034C22B6CC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A823AC28-91EF-403E-98FB-034C22B6CC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A823AC28-91EF-403E-98FB-034C22B6CC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A823AC28-91EF-403E-98FB-034C22B6CC97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A882DCAB-E555-47AA-B289-77A425CA3ABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A882DCAB-E555-47AA-B289-77A425CA3ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A882DCAB-E555-47AA-B289-77A425CA3ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A882DCAB-E555-47AA-B289-77A425CA3ABE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
