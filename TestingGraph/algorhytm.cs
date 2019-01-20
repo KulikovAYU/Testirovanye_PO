@@ -69,29 +69,22 @@ namespace TestingGraph
         /// </summary>
         /// <param name="Arr">Входной массив</param>
         /// <param name="j">номер строки</param>
-        /// <returns>кол-во единиц</returns>
-        public virtual int CountUnits(int[,] Arr, int j) 
+        /// <param name="buildingType">тип построения матрицы</param>
+        /// <param name="vertexCnt">кол-во вершин</param>
+        /// <returns>кол-во единиц в j строке</returns>
+        public virtual int CountUnits(int[,] Arr, int j, ETypeControls buildingType,int vertexCnt) 
         {
-            if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput) //1
+            int count = 0;                                                      //1
+            if (buildingType != ETypeControls.eEdgeListInput) //2
             {
-                int count = 0;                                                 //2
-                for (int i = 0; i < 2; i++)                                    //3
+                                                                 
+                for (int i = 0; i < vertexCnt; i++)                             //3
                 {
-                    if (Arr[j, i].ToString().Equals("1"))                      //4
-                        count++;                                               //5
-                }                                                              //6-к.ц.
-                return count;                                                  //7
+                    if (Arr[j, i].ToString().Equals("1"))                       //4
+                        count++;                                                //5
+                }                                                               //6-к.ц.
             }
-            else
-            {
-                int count = 0;                                                  //8
-                for (int i = 0; i < m_ribsCnt; i++)                             //9
-                {
-                    if (Arr[j, i].ToString().Equals("1"))                       //10
-                        count++;                                                //11
-                }                                                               //12-к.ц.
-                return count;                                                   //7
-            }
+            return count;                                                       //7
         }
 
         /// <summary>
@@ -113,9 +106,10 @@ namespace TestingGraph
                 {
                     mass[0, j] = Arr[j, i];
                 }
-                m_ribsCnt = mass.Length;
+               // m_ribsCnt = mass.Length;
+                m_VertexCnt = mass.Length;
                 m_buildingType = (int)ETypeControls.eIncidenceMatrixInput;
-                int temp = CountUnits(mass, 0);
+                int temp = CountUnits(mass, 0, ETypeControls.eIncidenceMatrixInput, mass.Length);
                 if (temp == 2 || temp == 0)
                     result += temp;
                 else return false;
