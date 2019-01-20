@@ -2,9 +2,53 @@
 
 namespace TestingGraph
 {
+    public interface ICounter
+    {
+        int CountUnits(int[,] Arr, int j, ETypeControls buildingType, int vertexCnt);
+    }
+
+    //конкретный класс счетчика кол-ва единиц в определенной строке массива
+    public class ConcreteCounterOfUnits : ICounter
+    {
+        /// <summary>
+        /// Метод подсчитывает кол-во единиц в определенной строке массива
+        /// </summary>
+        /// <param name="Arr">Входной массив</param>
+        /// <param name="j">номер строки</param>
+        /// <param name="buildingType">тип построения матрицы</param>
+        /// <param name="vertexCnt">кол-во вершин</param>
+        /// <returns>кол-во единиц в j строке</returns>
+        public int CountUnits(int[,] Arr, int j, ETypeControls buildingType, int vertexCnt)
+        {
+            int count = 0;                                                      //1
+            if (buildingType != ETypeControls.eEdgeListInput) //2
+            {
+
+                for (int i = 0; i < vertexCnt; i++)                             //3
+                {
+                    if (Arr[j, i].ToString().Equals("1"))                       //4
+                        count++;                                                //5
+                }                                                               //6-к.ц.
+            }
+            return count;                                                       //7
+        }
+    }
+
     public class algorhytm
     {
-
+        private ICounter m_Counter;
+        public algorhytm(ICounter counter = null)
+        {
+            if (counter == null)
+            {
+                m_Counter = new ConcreteCounterOfUnits();
+            }
+            else
+            {
+                m_Counter = counter;
+            }
+            
+        }
         public int[,] mas;
         // mas[i][j] - максимальная величина потока, способная течь по ребру (i,j) or матрица хранящая граф
 
@@ -23,41 +67,23 @@ namespace TestingGraph
             m_buildingType = n3;
         }
 
-        public virtual string Bulid(int[,] massy, int leny)
+       public virtual int[] RetRow(int[,] Arr, int j) //возращает строку с индексом j из массива Arr
         {
-
-            string result = "";
-            int[,] masCopy = new int[leny, leny];
-            for (int i = 0; i < leny; i++)
-            {
-                for (int j = 0; j < leny; j++)
-                {
-                    masCopy[i, j] = massy[i, j];
-                }
-            }
-            string[] a1 = RetRow(massy, 1);
-            result = result + a1;
-            return result;
-
-        }
-
-        public virtual string[] RetRow(int[,] Arr, int j) //возращает строку с индексом j из массива Arr
-        {
-            string[] mas1 = null; //1
+            int[] mas1 = null; //1
             if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput) //2
             {
-               mas1 = new string[2];  //3
+               mas1 = new int[2];  //3
                 for (int i = 0; i < 2; i++) //4
                 {
-                    mas1[i] = Arr[j, i].ToString();//5
+                    mas1[i] = Arr[j, i];//5
                 }//6 -к.ц.
             }
             else
             {
-               mas1 = new string[m_ribsCnt]; //7
+               mas1 = new int[m_ribsCnt]; //7
                 for (int i = 0; i < m_ribsCnt; i++) //8
                 {
-                    mas1[i] = Arr[j, i].ToString(); //9
+                    mas1[i] = Arr[j, i]; //9
                 }   //10 - к.ц.
             }
 
@@ -72,20 +98,12 @@ namespace TestingGraph
         /// <param name="buildingType">тип построения матрицы</param>
         /// <param name="vertexCnt">кол-во вершин</param>
         /// <returns>кол-во единиц в j строке</returns>
-        public virtual int CountUnits(int[,] Arr, int j, ETypeControls buildingType,int vertexCnt) 
+        public int CountUnits(int[,] Arr, int j, ETypeControls buildingType,int vertexCnt)
         {
-            int count = 0;                                                      //1
-            if (buildingType != ETypeControls.eEdgeListInput) //2
-            {
-                                                                 
-                for (int i = 0; i < vertexCnt; i++)                             //3
-                {
-                    if (Arr[j, i].ToString().Equals("1"))                       //4
-                        count++;                                                //5
-                }                                                               //6-к.ц.
-            }
-            return count;                                                       //7
+            return m_Counter.CountUnits(Arr, j, buildingType, vertexCnt);
         }
+
+
 
         /// <summary>
         /// Метод проверяет корректность введенных данных в матрицу инцедентности
@@ -96,6 +114,7 @@ namespace TestingGraph
         public virtual bool Check(int[,] Arr, int number)
         {
             int result = 0;
+            
             int lim = Arr.GetLength(0);
             int lim2 = Arr.GetLength(1);
 
@@ -106,81 +125,18 @@ namespace TestingGraph
                 {
                     mass[0, j] = Arr[j, i];
                 }
-               // m_ribsCnt = mass.Length;
+                
+                // m_ribsCnt = mass.Length;
                 m_VertexCnt = mass.Length;
                 m_buildingType = (int)ETypeControls.eIncidenceMatrixInput;
+                
                 int temp = CountUnits(mass, 0, ETypeControls.eIncidenceMatrixInput, mass.Length);
+                
                 if (temp == 2 || temp == 0)
                     result += temp;
                 else return false;
             }
             return result == number;
-        }
-
-        public string Вulid(int[,] massy, int leny)
-        {
-            if (leny == 1) al = "1111"; if (leny == 2) al = "1010"; if (leny == 3) al = "";
-
-            string result = string.Empty;
-            int[,] masCopy = new int[leny, leny];
-            for (int i = 0; i < leny; i++)
-            {
-                for (int j = 0; j < leny; j++)
-                {
-                    masCopy[i, j] = massy[i, j];
-                }
-            }
-            string[] a1 = RetRow(massy, 1);
-            result += al;
-            return result;
-        }
-
-        //public virtual string[] RеtRow(int[,] Arr, int j) //возращает строку с индексом j из массива Arr
-        //{
-        //    string[] mas1 = null;//1
-        //    if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput) //2
-        //    {
-        //       mas1 = new string[2];//3
-        //        for (int i = 0; i < 2; i++)//4
-        //        {
-        //            mas1[i] = Arr[j, i].ToString();//5
-        //        }//6 -к.ц.
-        //    }
-        //    else
-        //    {
-        //        mas1 = new string[m_ribsCnt];//7
-        //        for (int i = 0; i < m_ribsCnt; i++)//8
-        //        {
-        //            mas1[i] = Arr[j, i].ToString();//9
-        //        }//10-к.ц.
-        //    }
-        //    return mas1;//11
-        //}
-
-
-        public virtual string[] RеtRow(int[,] Arr, int j) //возращает строку с индексом j из массива Arr
-        {
-            if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput)
-            {
-                string[] mas1 = new string[2];
-                for (int i = 0; i < 2; i++)
-                {
-                    mas1[i] = Arr[j, i].ToString();
-                }
-
-                return mas1;
-            }
-            else
-            {
-                string[] mas1 = new string[m_ribsCnt];
-                for (int i = 0; i < m_ribsCnt; i++)
-                {
-                    mas1[i] = Arr[j, i].ToString();
-                }
-
-                return mas1;
-            }
-
         }
 
         public virtual void DoLinks(System.Windows.Forms.RichTextBox TextBox)
