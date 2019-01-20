@@ -57,5 +57,6 @@ namespace TestingGraph
             numericUpDown2.Hide();
             bFlagIsVisible = false;
         }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace TestingGraph
@@ -88,18 +89,41 @@ namespace TestingGraph
             }
         }
 
-        /// <summary>
-        /// Инцедентности
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button5_Click(object sender, EventArgs e)
+        enum CurrentVarToView 
         {
-            Boolean flaggy = Check();
-            
+            eAdjacencyMatrixBtn,//матрица смежности
+            eIncidenceMatrixBtn,//матрица инцедентности
+            eEdgeListInputBtn//список ребер
+        }
+
+
+        private CurrentVarToView m_CheckedVar; //выбранный вариант для отображения
+
+        /// <summary>
+        /// Метод проверяет все условия по классам эквивалентности и
+        /// в случае ошибки выводит её пользователю
+        /// </summary>
+        void ValidateAllAndRun()
+        {
+            Boolean flaggy = Check() || CheckIntsedentMatrix();
+
+
             if (!flaggy)
             {
-                m_algo.DoInt(TextBox);
+                switch (m_CheckedVar)
+                {
+                    case CurrentVarToView.eAdjacencyMatrixBtn: //матрица смежности
+                        m_algo.DoSmez(TextBox);
+                        break;
+                    case CurrentVarToView.eIncidenceMatrixBtn://матрица инцедентности
+                        m_algo.DoInt(TextBox);
+                        break;
+                    case CurrentVarToView.eEdgeListInputBtn: //список ребер
+                        m_algo.DoLinks(TextBox);
+                        break;
+                }
+
+             
                 TextBox.Show();
                 setka.Hide();
                 Reset.Show();
@@ -107,20 +131,35 @@ namespace TestingGraph
         }
 
         /// <summary>
-        /// Ребра
+        /// матрица инцедентности
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button5_Click(object sender, EventArgs e)
+        {
+            m_CheckedVar = CurrentVarToView.eIncidenceMatrixBtn;
+            ValidateAllAndRun();
+        }
+
+        private bool CheckIntsedentMatrix()
+        {
+            if ((m_algo.m_buildingType == (int)ETypeControls.eIncidenceMatrixInput) && !m_algo.Check(m_algo.mas, 2)) ///Check //!CheckRibbons()
+            {
+                MessageBox.Show("Ошибка Ввода", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return true;
+            }
+            return false; 
+        }
+
+        /// <summary>
+        /// список ребер
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void setkaOK_Click(object sender, EventArgs e)
         {
-            var flaggy = Check();
-            if (!flaggy)
-            {
-                m_algo.DoLinks(TextBox);
-                TextBox.Show();
-                setka.Hide();
-                Reset.Show();
-            }
+            m_CheckedVar = CurrentVarToView.eEdgeListInputBtn;
+            ValidateAllAndRun();
         }
 
         //Проверка правильности введенных данных
@@ -143,8 +182,9 @@ namespace TestingGraph
                         || ((m_algo.m_buildingType == 1) && (m_algo.mas[i, j] > 1))
                         || ((m_algo.m_buildingType == 1) && (m_algo.mas[i, j] < 0))
                         || ((m_algo.m_buildingType == 2) && (m_algo.mas[i, j] > 1))
-                        || ((m_algo.m_buildingType == 2) && (m_algo.mas[i, j] < 0)))
-                    {
+                        || ((m_algo.m_buildingType == 2) && (m_algo.mas[i, j] < 0))
+                        )
+                        {
                         MessageBox.Show("Ошибка Ввода","Ошибка",MessageBoxButtons.OK,MessageBoxIcon.Error);
                         flaggy = true;
                         break;
@@ -160,21 +200,31 @@ namespace TestingGraph
             return flaggy;
         }
 
+
+
         /// <summary>
-        /// Смежности
+        /// матрица смежности
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-            var flaggy = Check();
-            if (!flaggy)
+           m_CheckedVar = CurrentVarToView.eAdjacencyMatrixBtn;
+           ValidateAllAndRun();
+        }
+
+        private void setka_KeyDown(object sender, EventArgs e)
+        {
+            if (sender is DataGridView dataGrid)
             {
-                m_algo.DoSmez(TextBox);
-                TextBox.Show();
-                setka.Hide();
-                Reset.Show();
+                if (m_algo.m_buildingType != 3)
+                {
+                     Check();
+                }
+               
             }
+           
+           
         }
     }
 }

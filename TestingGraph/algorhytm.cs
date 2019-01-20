@@ -36,7 +36,7 @@ namespace TestingGraph
                 }
             }
             string[] a1 = RetRow(massy, 1);
-            result = result + al;
+            result = result + a1;
             return result;
 
         }
@@ -44,7 +44,7 @@ namespace TestingGraph
         public virtual string[] RetRow(int[,] Arr, int j) //возращает строку с индексом j из массива Arr
         {
             string[] mas1 = null; //1
-            if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput && Arr != null && Arr.Length != 0) //2
+            if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput) //2
             {
                mas1 = new string[2];  //3
                 for (int i = 0; i < 2; i++) //4
@@ -64,7 +64,13 @@ namespace TestingGraph
             return mas1; //11
         }
 
-        public virtual int CountUnits(int[,] Arr, int j) //подсчет единиц 
+        /// <summary>
+        /// Метод подсчитывает кол-во единиц в определенной строке массива
+        /// </summary>
+        /// <param name="Arr">Входной массив</param>
+        /// <param name="j">номер строки</param>
+        /// <returns>кол-во единиц</returns>
+        public virtual int CountUnits(int[,] Arr, int j) 
         {
             if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput) //1
             {
@@ -88,7 +94,12 @@ namespace TestingGraph
             }
         }
 
-
+        /// <summary>
+        /// Метод проверяет корректность введенных данных в матрицу инцедентности
+        /// </summary>
+        /// <param name="Arr">Массив</param>
+        /// <param name="number">требуемое кол-во вершин</param>
+        /// <returns>если данные верны = true</returns>
         public virtual bool Check(int[,] Arr, int number)
         {
             int result = 0;
@@ -126,7 +137,7 @@ namespace TestingGraph
                 }
             }
             string[] a1 = RetRow(massy, 1);
-            result = result + al;
+            result += al;
             return result;
         }
 
@@ -180,6 +191,7 @@ namespace TestingGraph
 
         public virtual void DoLinks(System.Windows.Forms.RichTextBox TextBox)
         {
+            TextBox.Clear();
             TextBox.AppendText(" Список ребер графа:\n");
             TextBox.AppendText("\n");
 
@@ -237,6 +249,7 @@ namespace TestingGraph
 
         public virtual void DoSmez(System.Windows.Forms.RichTextBox TextBox)
         {
+            TextBox.Clear();
             TextBox.AppendText(" Матрица смежности графа:\n");
 
             if ((ETypeControls)m_buildingType == ETypeControls.eAdjacencyMatrixInput) // если по матрице смежности
@@ -332,6 +345,7 @@ namespace TestingGraph
 
         public virtual void DoInt(System.Windows.Forms.RichTextBox TextBox)
         {
+            TextBox.Clear();
             TextBox.AppendText(" Матрица инцидентности графа:\n");
             if ((ETypeControls)m_buildingType == ETypeControls.eAdjacencyMatrixInput) // если по матрице смежности
             {
