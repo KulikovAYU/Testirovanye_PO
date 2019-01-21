@@ -61,7 +61,7 @@ namespace TestingGraph
                 }
                 for (int i = 0; i < n1; i++)
                 {
-                    ds.Tables[0].Rows.Add(m_algo.RetRow(m_algo.mas, i));
+                    ds.Tables[0].Rows.Add(m_algo.FillTable(m_algo.mas, i));
                 }
             }
             else
@@ -72,7 +72,7 @@ namespace TestingGraph
                 }
                 for (int i = 0; i < n; i++)
                 {
-                    ds.Tables[0].Rows.Add(m_algo.RetRow(m_algo.mas, i));
+                    ds.Tables[0].Rows.Add(m_algo.FillTable(m_algo.mas, i));
                 }
             }
            
@@ -165,7 +165,7 @@ namespace TestingGraph
         //Проверка правильности введенных данных
         private bool Check()
         {
-            Boolean flaggy = false;
+           Boolean flaggy = false;
 
             TextBox.Clear();
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -182,24 +182,47 @@ namespace TestingGraph
                         || ((m_algo.m_buildingType == 1) && (m_algo.mas[i, j] > 1))
                         || ((m_algo.m_buildingType == 1) && (m_algo.mas[i, j] < 0))
                         || ((m_algo.m_buildingType == 2) && (m_algo.mas[i, j] > 1))
-                        || ((m_algo.m_buildingType == 2) && (m_algo.mas[i, j] < 0))
+                        || ((m_algo.m_buildingType == 2) && (m_algo.mas[i, j] < 0)
+                        || (m_algo.m_buildingType == 1) && !CheckAndValidate())
                         )
                         {
                         MessageBox.Show("Ошибка Ввода","Ошибка",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                        flaggy = true;
-                        break;
+                       // flaggy = true;
+                            return true;
+                       // break;
                     }
                 }
                 else //если не число - выводим сообщение
                 {
                     MessageBox.Show("Ошибка Ввода", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    flaggy = true;
-                    break;
+                   // flaggy = true;
+                    return true;
+                   // break;
                 }
             }
             return flaggy;
         }
 
+        private bool CheckAndValidate()
+        {
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            for (int j = 0; j < ds.Tables[0].Columns.Count; j++)
+            {
+                int nnn = 0;
+                var isNumeric = int.TryParse(Convert.ToString(ds.Tables[0].Rows[i][j]), out nnn);
+
+                int nnn1 = 0;
+                var isNumeric1 = int.TryParse(Convert.ToString(ds.Tables[0].Rows[j][i]), out nnn1);
+
+               
+                if (nnn != nnn1 || (i == j && nnn != 0))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
 
         /// <summary>
@@ -215,14 +238,14 @@ namespace TestingGraph
 
         private void setka_KeyDown(object sender, EventArgs e)
         {
-            if (sender is DataGridView dataGrid)
-            {
-                if (m_algo.m_buildingType != 3)
-                {
-                     Check();
-                }
+            //if (sender is DataGridView dataGrid)
+            //{
+            //    if (m_algo.m_buildingType != 3)
+            //    {
+            //         Check();
+            //    }
                
-            }
+            //}
            
            
         }

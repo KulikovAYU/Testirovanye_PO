@@ -84,7 +84,7 @@ namespace TestingGraph.Tests
             
             algorhytm algo = new algorhytm(mock.Object);
            
-            var res = algo.Check(expression, 4);
+            var res = algo.Check(expression, 2);
 
             //mock.Verify(p=>p.CountUnits(mass, 0, ETypeControls.eIncidenceMatrixInput, mass.Length),Times.Exactly(2));
             mock.VerifyAll();
@@ -110,7 +110,7 @@ namespace TestingGraph.Tests
 
             algorhytm algo = new algorhytm();
 
-            bool actual = algo.Check(expression, 4);
+            bool actual = algo.Check(expression, 2);
 
             Assert.AreEqual(actual, true);
         }

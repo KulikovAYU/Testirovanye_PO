@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TestingGraph
 {
@@ -57,11 +58,23 @@ namespace TestingGraph
         public string al = string.Empty;
         public int m_buildingType = (int) ETypeControls.eEdgeListInput; //вариант построения
 
+       
+
 
         public virtual void create_mas(int n, int n1, int n3)
         {
-            mas = (ETypeControls) n3 == ETypeControls.eEdgeListInput ? new int[n1, 2] : new int[n, n1];
 
+             mas = (ETypeControls) n3 == ETypeControls.eEdgeListInput ? new int[n1, 2] : new int[n, n1];
+
+            //Матрица смежности
+            //var arr1 = new[,] {{0, 1, 0, 1}, {1, 0, 1, 1}, {1, 1, 1, 1}, {1, 1, 0, 0}};
+            var arr2_true = new[,] {{0, 1, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 1}, {1, 0, 1, 0}};//правильный
+         
+
+            //Матрица инцедентности
+            // var arr2_ints_true = new[,] {{1, 1, 1, 0, 0}, {1, 0, 0, 1, 0}, {0, 1, 0, 1, 1}, {0, 0, 1, 0, 1}};//правильный
+
+           // mas = (ETypeControls)n3 == ETypeControls.eEdgeListInput ? new int[n1, 2] : arr2_ints_true;
             m_VertexCnt = n;
             m_ribsCnt = n1;
             m_buildingType = n3;
@@ -84,6 +97,30 @@ namespace TestingGraph
                 for (int i = 0; i < m_ribsCnt; i++) //8
                 {
                     mas1[i] = Arr[j, i]; //9
+                }   //10 - к.ц.
+            }
+
+            return mas1; //11
+        }
+
+        //заполняет массив нулями
+        public virtual string[] FillTable(int[,] Arr, int j)
+        {
+            string[] mas1 = null; //1
+            if ((ETypeControls)m_buildingType == ETypeControls.eEdgeListInput) //2
+            {
+                mas1 = new string[2];  //3
+                for (int i = 0; i < 2; i++) //4
+                {
+                    mas1[i] = Arr[j, i].ToString();//5
+                }//6 -к.ц.
+            }
+            else
+            {
+                mas1 = new string[m_ribsCnt]; //7
+                for (int i = 0; i < m_ribsCnt; i++) //8
+                {
+                    mas1[i] = Arr[j, i].ToString(); //9
                 }   //10 - к.ц.
             }
 
@@ -114,7 +151,9 @@ namespace TestingGraph
         public virtual bool Check(int[,] Arr, int number)
         {
             int result = 0;
-            
+
+            bool flag = false;
+
             int lim = Arr.GetLength(0);
             int lim2 = Arr.GetLength(1);
 
@@ -131,12 +170,18 @@ namespace TestingGraph
                 m_buildingType = (int)ETypeControls.eIncidenceMatrixInput;
                 
                 int temp = CountUnits(mass, 0, ETypeControls.eIncidenceMatrixInput, mass.Length);
-                
-                if (temp == 2 || temp == 0)
-                    result += temp;
-                else return false;
+
+                if (temp != number)
+                {
+                    return false;
+                }
+
+                //result += temp;
+                //else return false;
             }
-            return result == number;
+            //return result == number;
+
+            return true;
         }
 
         public virtual void DoLinks(System.Windows.Forms.RichTextBox TextBox)
